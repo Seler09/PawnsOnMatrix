@@ -1,3 +1,10 @@
+//This project was written quickly at the university
+//--------------------TO DO------------------------
+//1.change names from Polish to English
+//2.Sse object-oriented programming
+
+
+
 #include <iostream>
 #include <queue>
 #include <vector>
@@ -12,8 +19,8 @@ using namespace std;
 std::mutex mPX;
 std::mutex mPY;
 
-std::queue<int>kolejka1;
-std::queue<int>kolejka2;
+std::queue<int>queueOne;
+std::queue<int>queueTwo;
 std::mutex k1;
 std::mutex k2;
 std::mutex mx;
@@ -41,7 +48,7 @@ pionek tenPionek;
 std::vector<pionek>wspPionka;
 
 
-//--------------------FUNKCJE------------------------
+
 
 
 
@@ -50,12 +57,12 @@ void producent()
 	do{
 	int wspX = rand()% (sizeX) + 0;
 	k1.lock();
-	kolejka1.push(wspX);
+	queueOne.push(wspX);
 	k1.unlock();
 
 	int wspY = rand()% (sizeY) + 0;
 	k2.lock();
-	kolejka2.push(wspY);
+	queueTwo.push(wspY);
 	k2.unlock();
 	}while(true);
 }
@@ -65,13 +72,13 @@ void przetwarzacz()
 	do{
 		mx.lock();
 			k1.lock();
-				tenPionek.x = kolejka1.front();
-				kolejka1.pop();
+				tenPionek.x = queueOne.front();
+				queueOne.pop();
 			k1.unlock();
 
 			k2.lock();
-				tenPionek.y = kolejka2.front();
-				kolejka2.pop();
+				tenPionek.y = queueTwo.front();
+				queueTwo.pop();
 			k2.unlock();
 		mx.unlock();
 		std::this_thread::sleep_for (std::chrono::milliseconds(100));
